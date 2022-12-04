@@ -1,18 +1,16 @@
-package com.example.demo.src.board;
+package com.example.demo.src.post;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.secret.Secret;
-import com.example.demo.src.board.model.GetBoardRes;
-import com.example.demo.src.user.UserDao;
-import com.example.demo.src.user.model.*;
-import com.example.demo.utils.AES128;
+import com.example.demo.src.post.model.GetPostRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import static com.example.demo.config.BaseResponseStatus.*;
+
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service    // [Business Layer에서 Service를 명시하기 위해서 사용] 비즈니스 로직이나 respository layer 호출하는 함수에 사용된다.
@@ -23,48 +21,38 @@ import static com.example.demo.config.BaseResponseStatus.*;
  * 요청한 작업을 처리하는 관정을 하나의 작업으로 묶음
  * dao를 호출하여 DB CRUD를 처리 후 Controller로 반환
  */
-public class BoardProvider {
+public class PostProvider {
 
 
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
-    private final BoardDao boardDao;
+    private final PostDao postDao;
     private final JwtService jwtService; // JWT부분은 7주차에 다루므로 모르셔도 됩니다!
 
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired //readme 참고
-    public BoardProvider(BoardDao boardDao, JwtService jwtService) {
-        this.boardDao = boardDao;
+    public PostProvider(PostDao postDao, JwtService jwtService) {
+        this.postDao = postDao;
         this.jwtService = jwtService; // JWT부분은 7주차에 다루므로 모르셔도 됩니다!
     }
     // ******************************************************************************
 
-    // 게시글들 정보 조회
-    public List<GetBoardRes> getPosts() throws BaseException {
+    // 해당 userIdx를 갖는 게시물 정보 조회
+    public List<GetPostRes> getPostsByUserIdx(int userIdx) throws BaseException {
         try {
-            List<GetBoardRes> getBoardRes = boardDao.getPosts();
-            return getBoardRes;
+            List<GetPostRes> getPostRes = postDao.getPostsByUserIdx(userIdx);
+            return getPostRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    // 해당 title을 갖는 게시글들 정보 조회
-    public List<GetBoardRes> getPostsByTitle(String title) throws BaseException {
+    // 해당 postIdx를 갖는 게시물 정보 조회
+    public GetPostRes getPost(int postIdx) throws BaseException {
         try {
-            List<GetBoardRes> getBoardRes = boardDao.getPostsByTitle(title);
-            return getBoardRes;
-        } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-
-    // 해당 boardIdx를 갖는 게시글 정보 조회
-    public GetBoardRes getPost(int boardIdx) throws BaseException {
-        try {
-            GetBoardRes getBoardRes = boardDao.getPost(boardIdx);
-            return getBoardRes;
+            GetPostRes getPostRes = postDao.getPost(postIdx);
+            return getPostRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

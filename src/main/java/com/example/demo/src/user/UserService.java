@@ -56,26 +56,48 @@ public class UserService {
         }
         try {
             int userIdx = userDao.createUser(postUserReq);
-            return new PostUserRes(userIdx);
 
-//  *********** 해당 부분은 7주차 수업 후 주석해제하서 대체해서 사용해주세요! ***********
-//            //jwt 발급.
-//            String jwt = jwtService.createJwt(userIdx);
-//            return new PostUserRes(jwt,userIdx);
-//  *********************************************************************
+            //jwt 발급.
+            String jwt = jwtService.createJwt(userIdx);
+            return new PostUserRes(userIdx, jwt);
+
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    // 회원정보 수정(Patch)
-    public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
+//    // 회원정보 수정(Patch)
+//    public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
+//        try {
+//            int result = userDao.modifyUserName(patchUserReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+//            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+//                throw new BaseException(MODIFY_FAIL_USERNAME);
+//            }
+//        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
+
+    // 프로필 편집(Patch)
+    public void modifyProfile(PatchUserReq patchUserReq) throws BaseException {
         try {
-            int result = userDao.modifyUserName(patchUserReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            int result = userDao.modifyProfile(patchUserReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
             if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
                 throw new BaseException(MODIFY_FAIL_USERNAME);
             }
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 회원탈퇴(Patch)
+    public void deleteUser(int userIdx) throws BaseException {
+        try{
+            int result = userDao.updateUserStatus(userIdx);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_USER);
+            }
+        } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

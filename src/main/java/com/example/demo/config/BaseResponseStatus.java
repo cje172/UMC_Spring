@@ -31,9 +31,13 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
 
 
-    // [POST] /board
-    POST_BOARD_EMPTY_TITLE(false, 2015, "제목을 입력해주세요."),
-    POST_BOARD_EMPTY_CONTENT(false, 2016, "내용을 입력해주세요."),
+    // [POST] /posts
+    POST_POST_EMPTY_CONTENT(false, 2016, "내용을 입력해주세요."),
+
+    // [POST] /follow
+    POST_FOLLOW_SELF(false, 2018, "자신을 팔로우할 수 없습니다."),
+    POST_FOLLOW_EXISTS_FOLLOW(false, 2017, "이미 등록된 팔로우입니다."),
+
 
     /**
      * 3000 : Response 오류
@@ -55,9 +59,20 @@ public enum BaseResponseStatus {
 
     //[PATCH] /users/{userIdx}
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
+    MODIFY_FAIL_PROFILE(false,4013,"프로필 편집 실패"),
 
-    //[PATCH] /boards/{boardIdx}
-    MODIFY_FAIL_POST(false,4015,"게시글 수정 실패"),
+    //[PATCH] /users/{userIdx}/status
+    DELETE_FAIL_USER(false,4015,"프로필 편집 실패"),
+
+    //[PATCH] /posts/{postIdx}
+    MODIFY_FAIL_POST(false,4016,"게시글 수정 실패"),
+    DELETE_FAIL_POST(false, 4017, "게시물 삭제 실패"),
+
+    //[PATCH] /{postIdx}/comments/{commentIdx}/status
+    DELETE_FAIL_COMMENT(false, 4018, "댓글 삭제 실패"),
+
+    //[PATCH] /{followerIdx}/{followingIdx}/status
+    DELETE_FAIL_FOLLOW(false, 4019, "팔로우 취소 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");

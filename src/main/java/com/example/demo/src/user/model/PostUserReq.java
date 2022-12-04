@@ -9,5 +9,7 @@ import lombok.*;
 public class PostUserReq {
     private String email;
     private String password;
-    private String nickname;
+    private String username;
+    private String profileIntro;
+    private String profileImgUrl;
 }
